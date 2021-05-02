@@ -20,6 +20,11 @@ class MethodDispatcher(object):
 
             @functools.wraps(method)
             def handler(params):
+
+                if method_name == 'm_text_document__completion':
+                    # monaco editor sends us a list in this case, not a map
+                    return method(*(params or []))
+
                 return method(**(params or {}))
 
             return handler
