@@ -139,6 +139,7 @@ class Endpoint(object):
     def _handle_notification(self, method, params):
         """Handle a notification from the client."""
         if method == CANCEL_METHOD:
+            log.debug("CANCELLING")
             self._handle_cancel_notification(params['id'])
             return
 
@@ -149,7 +150,9 @@ class Endpoint(object):
             return
 
         try:
+            log.debug("ATTEMPTING HANDLE")
             handler_result = handler(params)
+            log.debug("HANDLED SUCCESSFULLY")
         except Exception:  # pylint: disable=broad-except
             log.exception("Failed to handle notification %s: %s", method, params)
             return
