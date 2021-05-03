@@ -182,16 +182,16 @@ class Endpoint(object):
         handler_result = handler(params)
 
         if callable(handler_result):
-            log.debug("Executing async request handler %s", handler_result)
+            print("Executing async request handler %s", handler_result)
             request_future = self._executor_service.submit(handler_result)
             self._client_request_futures[msg_id] = request_future
             request_future.add_done_callback(self._request_callback(msg_id))
         elif isinstance(handler_result, futures.Future):
-            log.debug("Request handler is already a future %s", handler_result)
+            print("Request handler is already a future %s", handler_result)
             self._client_request_futures[msg_id] = handler_result
             handler_result.add_done_callback(self._request_callback(msg_id))
         else:
-            log.debug("Got result from synchronous request handler: %s", handler_result)
+            print("Got result from synchronous request handler: %s", handler_result)
             self._consumer({
                 'jsonrpc': JSONRPC_VERSION,
                 'id': msg_id,
@@ -215,10 +215,10 @@ class Endpoint(object):
             try:
                 message['result'] = future.result()
             except JsonRpcException as e:
-                log.exception("Failed to handle request %s", request_id)
+                print("Failed to handle request %s", request_id)
                 message['error'] = e.to_dict()
             except Exception:  # pylint: disable=broad-except
-                log.exception("Failed to handle request %s", request_id)
+                print("Failed to handle request %s", request_id)
                 message['error'] = JsonRpcInternalError.of(sys.exc_info()).to_dict()
 
             self._consumer(message)
