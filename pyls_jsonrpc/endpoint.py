@@ -25,6 +25,7 @@ class Endpoint(object):
                 Defaults to the string value of :func:`uuid.uuid4`.
             max_workers (int, optional): The number of workers in the asynchronous executor pool.
         """
+        print("ENDPOINT CREATED")
         self._dispatcher = dispatcher
         self._consumer = consumer
         self._id_generator = id_generator
