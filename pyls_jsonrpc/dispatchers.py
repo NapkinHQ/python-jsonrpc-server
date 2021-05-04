@@ -20,15 +20,6 @@ class MethodDispatcher(object):
 
             @functools.wraps(method)
             def handler(params):
-
-                if 'completion' in method_name:
-                    # monaco editor sends us a list in this case, not a map
-                    print(params)
-                    print("WTF")
-                    x = method(*(params or []))
-                    print(x)
-                    return x
-
                 return method(**(params or {}))
 
             return handler
